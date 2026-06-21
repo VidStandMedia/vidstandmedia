@@ -1,18 +1,34 @@
+"use client";
+
+import { signIn, signOut, useSession } from "next-auth/react";
+
 export default function Home() {
+  const { data: session } = useSession();
+
   return (
     <main className="min-h-screen flex items-center justify-center">
       <div className="text-center">
-        <h1 className="text-5xl font-bold">
-          VidStand Media
-        </h1>
+        {!session ? (
+          <button
+            onClick={() => signIn("google")}
+            className="px-6 py-3 bg-black text-white rounded-xl"
+          >
+            Sign in with YouTube
+          </button>
+        ) : (
+          <div className="space-y-4">
+            <p className="text-xl">
+              Signed in as {session.user?.email}
+            </p>
 
-        <p className="mt-4 text-xl">
-          We help creators get more YouTube views with Google Ads.
-        </p>
-
-        <button className="mt-6 px-6 py-3 bg-black text-white rounded-xl">
-          Get Started
-        </button>
+            <button
+              onClick={() => signOut()}
+              className="px-6 py-3 bg-red-500 text-white rounded-xl"
+            >
+              Sign Out
+            </button>
+          </div>
+        )}
       </div>
     </main>
   );
