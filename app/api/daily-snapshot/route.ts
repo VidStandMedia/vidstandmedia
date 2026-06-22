@@ -50,6 +50,11 @@ const channelData =
 
 console.log(
   "CHANNEL DATA:",
+  JSON.stringify(channelData, null, 2)
+);
+
+console.log(
+  "CHANNEL DATA:",
   channelData
 );
 
