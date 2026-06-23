@@ -68,6 +68,9 @@ export async function GET() {
     const channel =
       channelData.items?.[0];
 
+      const channel =
+  channelData.items?.[0];
+
     if (!channel) {
       return Response.json(
         {
