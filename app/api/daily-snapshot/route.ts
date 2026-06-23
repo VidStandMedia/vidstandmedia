@@ -47,7 +47,12 @@ const channelResponse =
 
 const channelData =
   await channelResponse.json();
-
+  
+return Response.json({
+  success: true,
+  channelData,
+});
+  
 console.log(
   "CHANNEL DATA:",
   JSON.stringify(channelData, null, 2)
