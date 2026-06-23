@@ -65,9 +65,6 @@ export async function GET() {
       channelData
     );
 
-    const channel =
-      channelData.items?.[0];
-
       const channel =
   channelData.items?.[0];
 
