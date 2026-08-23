@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  campaigns Campaign[]
+}
+
+model Campaign {
+  id        String   @id @default(cuid())
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  goal   String
+  budget String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  channel   CampaignChannel?
+  googleAds CampaignGoogleAds?
+  business  CampaignBusiness?
+  video     CampaignVideo?
+  audience  CampaignAudience?
+  agreement CampaignAgreement?
+  payment   CampaignPayment?
+
+  @@index([userId])
+}
+
+model CampaignChannel {
+  id         String @id @default(cuid())
+  campaignId String @unique
+
+  youtubeChannelId String
+  title            String
+  thumbnail        String
+  email            String
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model CampaignGoogleAds {
+  id         String @id @default(cuid())
+  campaignId String @unique
+
+  hasAccount             Boolean?
+  customerId             String
+  accountName            String
+  currency               String
+  timeZone               String
+  verified               Boolean
+  managerInvitationSent  Boolean
+  managerAccessAccepted  Boolean
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model CampaignBusiness {
+  id         String @id @default(cuid())
+  campaignId String @unique
+
+  companyName String
+  website     String
+  category    String
+  timeZone    String
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model CampaignVideo {
+  id         String @id @default(cuid())
+  campaignId String @unique
+
+  youtubeVideoId String
+  title          String
+  thumbnail      String
+  publishedAt    String
+  viewCount     Int
+  duration       String
+  privacyStatus String
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model CampaignAudience {
+  id         String @id @default(cuid())
+  campaignId String @unique
+
+  country   String
+  language  String
+  gender    String
+  ageGroups String[]
+  interests String[]
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model CampaignAgreement {
+  id         String @id @default(cuid())
+  campaignId String @unique
+
+  termsAccepted         Boolean
+  privacyAccepted       Boolean
+  advertisingAuthorized Boolean
+  acceptedAt            DateTime?
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model CampaignPayment {
+  id         String @id @default(cuid())
+  campaignId String @unique
+
+  managementFee  Decimal @db.Decimal(10, 2)
+  managementPlan String
+
+  stripeCheckoutSessionId String?
+  stripeCustomerId        String?
+  stripeSubscriptionId    String?
+
+  paymentStatus String
+  paidAt        DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([stripeCustomerId])
+  @@index([stripeSubscriptionId])
+  @@index([stripeCheckoutSessionId])
+}
