@@ -45,12 +45,16 @@ export default function Footer() {
               </Link>
 
               <Link href="/terms" className="hover:text-red-500">
-                Terms of Service
-              </Link>
+  Terms of Service
+</Link>
 
-              <Link href="/#about" className="hover:text-red-500">
-                About Us
-              </Link>
+<Link href="/privacy" className="hover:text-red-500">
+  Privacy Policy
+</Link>
+
+<Link href="/#about" className="hover:text-red-500">
+  About Us
+</Link>
 
               <Link href="/login" className="hover:text-red-500">
                 Login / Sign Up
