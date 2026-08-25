@@ -19,9 +19,12 @@ export default function Footer() {
                 height={40}
               />
 
-              <h2 className="text-xl font-bold">
-                VidStandMedia
-              </h2>
+              <Link
+  href="/"
+  className="text-xl font-bold hover:text-red-500 transition"
+>
+  VidStandMedia
+</Link>
 
             </div>
 
