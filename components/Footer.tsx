@@ -55,7 +55,7 @@ export default function Footer() {
   Privacy Policy
 </Link>
 
-<Link href="/#about" className="hover:text-red-500">
+<Link href="/about" className="hover:text-red-500">
   About Us
 </Link>
 

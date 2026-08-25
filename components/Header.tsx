@@ -49,8 +49,15 @@ export default function Header() {
             Terms of Service
           </Link>
 
+        <Link
+         href="/privacy"
+         className="text-white hover:text-red-500 transition"
+        >
+         Privacy Policy
+       </Link>
+
           <Link
-            href="/#about"
+            href="/about"
             className="text-white hover:text-red-500 transition"
           >
             About Us

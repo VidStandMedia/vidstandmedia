@@ -6,14 +6,21 @@ export default function Home() {
       <section className="flex min-h-[80vh] items-center justify-center px-6">
         <div className="mx-auto max-w-4xl text-center">
 
-          <h1 className="text-3xl font-extrabold tracking-tight md:text-5xl">
-            Get the views your videos deserve!
+          <h1 className="mt-10 text-3xl font-extrabold tracking-tight md:text-5xl">
+            Welcome to VidStandMedia!
           </h1>
 
-          <p className="mt-6 text-lg text-gray-600 md:text-xl">
-            Run professionally managed Google Ads campaigns designed to grow
-            your YouTube channel and attract real viewers.
+          <p className="mx-auto mt-4 max-w-3xl text-lg text-gray-600 md:text-xl">
+            We are a digital advertising agency and web platform focused on
+            helping YouTube creators get more views on their videos through
+            professionally managed Google Ads campaigns.
+
           </p>
+
+          <h2 className="mt-10 text-2xl font-bold tracking-tight md:text-3xl">
+            Get the views your videos deserve!
+          </h2>
+
 
           <div className="mt-8">
             <a
