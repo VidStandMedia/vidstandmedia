@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useSession, signOut } from "next-auth/react";
 
 export default function Header() {
@@ -10,13 +11,23 @@ export default function Header() {
     <header className="bg-black border-b border-gray-800">
       <div className="max-w-7xl mx-auto h-20 px-8 flex items-center">
 
-        {/* Logo */}
+        {/* Logo + Brand */}
 
         <Link
           href="/"
-          className="text-3xl font-extrabold text-white hover:text-red-500 transition mr-16"
+          className="flex items-center gap-3 text-3xl font-extrabold text-white hover:text-red-500 transition mr-16"
         >
-          VidStandMedia
+          <Image
+            src="/logo.png"
+            alt="VidStandMedia Logo"
+            width={48}
+            height={48}
+            className="h-12 w-12 object-contain"
+          />
+
+          <span>
+            VidStandMedia
+          </span>
         </Link>
 
 
