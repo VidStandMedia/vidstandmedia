@@ -23,7 +23,7 @@ export default function Home() {
               href="/login"
               className="inline-block rounded-xl bg-red-600 px-8 py-4 text-lg font-semibold text-white transition hover:bg-red-700"
             >
-              Sign in with your Google Account
+              Sign up with your Google Account
             </a>
           </div>
 
@@ -45,62 +45,64 @@ export default function Home() {
           </h2>
 
           <p className="mt-6 text-center text-lg text-gray-300">
-            Your videos can appear across YouTube to reach viewers who are most
-            likely to enjoy your content.
+            
+          Your ad can appear in YouTube Search, on the Home feed, or alongside other relevant videos. 
+          We use your chosen audience, interests, location, and budget to help connect your content with viewers who are more likely to watch and discover your channel.
+
           </p>
 
 
           {/* YouTube Ad Examples */}
-          <div className="mt-16 grid gap-8 md:grid-cols-3">
+<div className="mt-16 grid gap-8 md:grid-cols-3">
 
-            {/* Image 1 */}
-            <div>
-              <div className="overflow-hidden rounded-xl">
-                <img
-                  src="/youtube-search-results.png"
-                  alt="YouTube Search Results"
-                  className="aspect-square w-full object-cover"
-                />
-              </div>
+  {/* Image 1 */}
+  <div>
+    <h3 className="mb-4 text-center text-xl font-semibold">
+      YouTube Search Results
+    </h3>
 
-              <h3 className="mt-4 text-center text-xl font-semibold">
-                YouTube Search Results
-              </h3>
-            </div>
-
-
-            {/* Image 2 */}
-            <div>
-              <div className="overflow-hidden rounded-xl">
-                <img
-                  src="/youtube-home-feed.png"
-                  alt="YouTube Home Feed"
-                  className="aspect-square w-full object-cover"
-                />
-              </div>
-
-              <h3 className="mt-4 text-center text-xl font-semibold">
-                YouTube Home Feed
-              </h3>
-            </div>
+    <div className="overflow-hidden rounded-xl">
+      <img
+        src="/youtube-search-results.png"
+        alt="YouTube Search Results"
+        className="aspect-square w-full object-cover"
+      />
+    </div>
+  </div>
 
 
-            {/* Image 3 */}
-            <div>
-              <div className="overflow-hidden rounded-xl">
-                <img
-                  src="/youtube-suggested-videos.png"
-                  alt="Suggested Videos"
-                  className="aspect-square w-full object-cover"
-                />
-              </div>
+  {/* Image 2 */}
+  <div>
+    <h3 className="mb-4 text-center text-xl font-semibold">
+      YouTube Home Feed
+    </h3>
 
-              <h3 className="mt-4 text-center text-xl font-semibold">
-                Suggested Videos
-              </h3>
-            </div>
+    <div className="overflow-hidden rounded-xl">
+      <img
+        src="/youtube-home-feed.png"
+        alt="YouTube Home Feed"
+        className="aspect-square w-full object-cover"
+      />
+    </div>
+  </div>
 
-          </div>
+
+  {/* Image 3 */}
+  <div>
+    <h3 className="mb-4 text-center text-xl font-semibold">
+      Suggested Videos
+    </h3>
+
+    <div className="overflow-hidden rounded-xl">
+      <img
+        src="/youtube-suggested-videos.png"
+        alt="Suggested Videos"
+        className="aspect-square w-full object-cover"
+      />
+    </div>
+  </div>
+
+</div>
 
 
           {/* Button */}
@@ -129,9 +131,9 @@ export default function Home() {
           </h2>
 
           <p className="mx-auto mt-6 max-w-3xl text-center text-lg text-gray-600">
-            We make it easy to promote your YouTube videos with professionally
-            managed Google Ads campaigns. You focus on creating great content—we
-            handle the advertising.
+            We make it easy to promote your YouTube videos with professionally managed Google Ads campaigns.
+            Sign in with your Google Account, choose your video and campaign settings, and let VidStandMedia handle the advertising management from setup through ongoing optimization.
+
           </p>
 
 
@@ -144,8 +146,8 @@ export default function Home() {
               </h3>
 
               <p className="mt-4 text-gray-600">
-                Sign in securely with your Google Account so we can connect your
-                videos and campaign information.
+                Securely connect your Google Account so VidStandMedia can connect your YouTube channel and retrieve the information needed for your campaign.
+
               </p>
             </div>
 
@@ -157,8 +159,8 @@ export default function Home() {
               </h3>
 
               <p className="mt-4 text-gray-600">
-                Select the video you want to promote, choose your budget, and
-                tell us what audience you want to reach.
+                Select the video you want to promote, choose your campaign goal and advertising budget, and tell us about the audience you want to reach.
+
               </p>
             </div>
 
@@ -170,9 +172,8 @@ export default function Home() {
               </h3>
 
               <p className="mt-4 text-gray-600">
-                We create and manage your Google Ads campaign using best
-                practices to help your video reach viewers who are interested
-                in your content.
+                VidStandMedia sets up and manages your Google Ads campaign. Your video can appear across YouTube in places such as Search, the Home feed, and alongside relevant videos.
+
               </p>
             </div>
 
@@ -180,12 +181,12 @@ export default function Home() {
             {/* Step 4 */}
             <div className="rounded-2xl border border-gray-200 p-8 shadow-sm">
               <h3 className="text-2xl font-bold text-black">
-                4. Track Your Growth
+                4. Track Your Campaign
               </h3>
 
               <p className="mt-4 text-gray-600">
-                Watch your campaign grow while we continue managing and
-                optimizing your promotion.
+                We monitor your campaign and manage its performance while you continue creating content. Your advertising budget remains under your control through your Google Ads account.
+
               </p>
             </div>
 
