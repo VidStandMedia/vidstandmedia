@@ -75,7 +75,7 @@ export default function Footer() {
             </h3>
 
             <p className="mt-5 text-gray-400">
-              support@vidstandmedia.com
+              vidstandmedia@gmail.com
             </p>
 
           </div>
