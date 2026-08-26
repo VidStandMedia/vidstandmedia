@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getYouTubeVideos } from "@/lib/videos";
+import { getCampaign } from "@/app/actions/campaign";
 import VideoClient from "./VideoClient";
 
 export default async function VideoPage() {
@@ -13,5 +14,12 @@ export default async function VideoPage() {
 
   const videos = await getYouTubeVideos();
 
-  return <VideoClient videos={videos} />;
+  const campaign = await getCampaign();
+
+  return (
+    <VideoClient
+      videos={videos}
+      initialVideo={campaign.video}
+    />
+  );
 }

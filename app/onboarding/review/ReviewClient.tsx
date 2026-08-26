@@ -28,6 +28,7 @@ export default function ReviewClient({
           like to make changes.
         </p>
 
+
         {/* Your YouTube Channel */}
 
         <div className="mt-14 rounded-2xl border border-gray-300 bg-white p-8 shadow-sm">
@@ -39,8 +40,8 @@ export default function ReviewClient({
             </h2>
 
             <Link
-              href="/onboarding"
-              className="font-semibold text-red-600 transition hover:text-red-700"
+              href="/onboarding?from=review"
+              className="font-semibold text-green-600 transition hover:text-green-700"
             >
               Edit →
             </Link>
@@ -92,6 +93,7 @@ export default function ReviewClient({
 
         </div>
 
+
         {/* Promotion Goal */}
 
         <div className="mt-8 rounded-2xl border border-gray-300 bg-white p-8 shadow-sm">
@@ -103,8 +105,8 @@ export default function ReviewClient({
             </h2>
 
             <Link
-              href="/onboarding/goals"
-              className="font-semibold text-red-600 transition hover:text-red-700"
+              href="/onboarding/goals?from=review"
+              className="font-semibold text-green-600 transition hover:text-green-700"
             >
               Edit →
             </Link>
@@ -133,6 +135,7 @@ export default function ReviewClient({
 
         </div>
 
+
         {/* Weekly Budget */}
 
         <div className="mt-8 rounded-2xl border border-gray-300 bg-white p-8 shadow-sm">
@@ -144,8 +147,8 @@ export default function ReviewClient({
             </h2>
 
             <Link
-              href="/onboarding/budget"
-              className="font-semibold text-red-600 transition hover:text-red-700"
+              href="/onboarding/budget?from=review"
+              className="font-semibold text-green-600 transition hover:text-green-700"
             >
               Edit →
             </Link>
@@ -174,6 +177,7 @@ export default function ReviewClient({
 
         </div>
 
+
         {/* Selected Video */}
 
         <div className="mt-8 rounded-2xl border border-gray-300 bg-white p-8 shadow-sm">
@@ -185,8 +189,8 @@ export default function ReviewClient({
             </h2>
 
             <Link
-              href="/onboarding/video"
-              className="font-semibold text-red-600 transition hover:text-red-700"
+              href="/onboarding/video?from=review"
+              className="font-semibold text-green-600 transition hover:text-green-700"
             >
               Edit →
             </Link>
@@ -270,6 +274,7 @@ export default function ReviewClient({
 
         </div>
 
+
         {/* Target Audience */}
 
         <div className="mt-8 rounded-2xl border border-gray-300 bg-white p-8 shadow-sm">
@@ -281,8 +286,8 @@ export default function ReviewClient({
             </h2>
 
             <Link
-              href="/onboarding/audience"
-              className="font-semibold text-red-600 transition hover:text-red-700"
+              href="/onboarding/audience?from=review"
+              className="font-semibold text-green-600 transition hover:text-green-700"
             >
               Edit →
             </Link>
@@ -354,6 +359,7 @@ export default function ReviewClient({
 
         </div>
 
+
         {/* Campaign Ready */}
 
         <div className="mt-8 rounded-2xl border border-green-300 bg-green-50 p-8">
@@ -369,6 +375,7 @@ export default function ReviewClient({
           </p>
 
         </div>
+
 
         {/* Navigation */}
 

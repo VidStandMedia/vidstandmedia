@@ -3,10 +3,13 @@
 import { useState } from "react";
 import { saveCampaignAudience } from "@/app/actions/campaign";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import OnboardingProgress from "@/components/OnboardingProgress";
+import type { CampaignAudience } from "@/lib/session/campaign";
 
-type AudienceClientProps = {};
+type AudienceClientProps = {
+  initialAudience: CampaignAudience;
+};
 
 const countries = [
   "United States",
@@ -63,15 +66,34 @@ const interests = [
   "Pets",
 ];
 
-export default function AudienceClient({}: AudienceClientProps) {
-  const router = useRouter();
+export default function AudienceClient({
+  initialAudience,
+}: AudienceClientProps) {
+  const searchParams = useSearchParams();
 
-  const [country, setCountry] = useState("");
-  const [language, setLanguage] = useState("");
-  const [gender, setGender] = useState("All");
+  const fromReview = searchParams.get("from") === "review";
 
-  const [selectedAges, setSelectedAges] = useState<string[]>([]);
-  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const [country, setCountry] = useState(
+    initialAudience?.country || ""
+  );
+
+  const [language, setLanguage] = useState(
+    initialAudience?.language || ""
+  );
+
+  const [gender, setGender] = useState(
+    initialAudience?.gender || "All"
+  );
+
+  const [selectedAges, setSelectedAges] = useState<string[]>(
+    initialAudience?.ageGroups || []
+  );
+
+  const [selectedInterests, setSelectedInterests] = useState<string[]>(
+    initialAudience?.interests || []
+  );
+
+  const [isSaving, setIsSaving] = useState(false);
 
   function toggleAge(age: string) {
     if (selectedAges.includes(age)) {
@@ -112,6 +134,48 @@ export default function AudienceClient({}: AudienceClientProps) {
     gender !== "" &&
     selectedAges.length > 0 &&
     selectedInterests.length > 0;
+
+  async function saveAudienceAndReturnToReview() {
+    if (!canContinue || isSaving) return;
+
+    setIsSaving(true);
+
+    try {
+      await saveCampaignAudience({
+        country,
+        language,
+        gender,
+        ageGroups: selectedAges,
+        interests: selectedInterests,
+      });
+
+      window.location.href = "/onboarding/review";
+    } catch (error) {
+      console.error("Failed to save audience:", error);
+      setIsSaving(false);
+    }
+  }
+
+  async function handleContinue() {
+    if (!canContinue || isSaving) return;
+
+    setIsSaving(true);
+
+    try {
+      await saveCampaignAudience({
+        country,
+        language,
+        gender,
+        ageGroups: selectedAges,
+        interests: selectedInterests,
+      });
+
+      window.location.href = "/onboarding/review";
+    } catch (error) {
+      console.error("Failed to save audience:", error);
+      setIsSaving(false);
+    }
+  }
 
   return (
     <main className="bg-white py-24 px-6">
@@ -191,7 +255,6 @@ export default function AudienceClient({}: AudienceClientProps) {
             onChange={(e) => setLanguage(e.target.value)}
             className="w-full rounded-xl border border-gray-300 px-5 py-4 text-black outline-none transition focus:border-green-600 focus:ring-4 focus:ring-green-100"
           >
-
             <option value="">
               Select a language...
             </option>
@@ -250,7 +313,8 @@ export default function AudienceClient({}: AudienceClientProps) {
 
         </div>
 
-                {/* Gender */}
+
+        {/* Gender */}
 
         <div className="mt-12">
 
@@ -265,7 +329,6 @@ export default function AudienceClient({}: AudienceClientProps) {
           <div className="grid gap-4 md:grid-cols-3">
 
             {genders.map((item) => (
-
               <button
                 key={item}
                 type="button"
@@ -288,7 +351,6 @@ export default function AudienceClient({}: AudienceClientProps) {
                 )}
 
               </button>
-
             ))}
 
           </div>
@@ -312,7 +374,6 @@ export default function AudienceClient({}: AudienceClientProps) {
             that best describe the audience you'd like to reach.
           </p>
 
-
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 
             {interests.map((interest) => {
@@ -324,9 +385,7 @@ export default function AudienceClient({}: AudienceClientProps) {
                 !isSelected &&
                 selectedInterests.length >= 3;
 
-
               return (
-
                 <button
                   key={interest}
                   type="button"
@@ -345,17 +404,13 @@ export default function AudienceClient({}: AudienceClientProps) {
                     {interest}
                   </div>
 
-
                   {isSelected && (
-
                     <div className="mt-3 text-sm font-semibold text-green-700">
                       ✓ Selected
                     </div>
-
                   )}
 
                 </button>
-
               );
 
             })}
@@ -373,126 +428,87 @@ export default function AudienceClient({}: AudienceClientProps) {
             Audience Summary
           </h2>
 
-
           <div className="mt-6 space-y-4">
 
-
             <p className="text-black">
-
               <span className="font-semibold">
                 Country:
               </span>{" "}
 
               {country ? (
-
                 <span className="text-black">
                   {country}
                 </span>
-
               ) : (
-
                 <span className="font-semibold text-red-600">
                   None selected
                 </span>
-
               )}
-
             </p>
 
-
-
             <p className="text-black">
-
               <span className="font-semibold">
                 Language:
               </span>{" "}
 
               {language ? (
-
                 <span className="text-black">
                   {language}
                 </span>
-
               ) : (
-
                 <span className="font-semibold text-red-600">
                   None selected
                 </span>
-
               )}
-
             </p>
 
-
-
             <p className="text-black">
-
               <span className="font-semibold">
                 Gender:
               </span>{" "}
 
               {gender ? (
-
                 <span className="text-black">
                   {gender}
                 </span>
-
               ) : (
-
                 <span className="font-semibold text-red-600">
                   None selected
                 </span>
-
               )}
-
             </p>
 
-                        <p className="text-black">
-
+            <p className="text-black">
               <span className="font-semibold">
                 Age Groups:
               </span>{" "}
 
               {selectedAges.length > 0 ? (
-
                 <span className="text-black">
                   {selectedAges.join(", ")}
                 </span>
-
               ) : (
-
                 <span className="font-semibold text-red-600">
                   None selected
                 </span>
-
               )}
-
             </p>
 
-
-
             <p className="text-black">
-
               <span className="font-semibold">
                 Interests:
               </span>{" "}
 
               {selectedInterests.length > 0 ? (
-
                 <span className="text-black">
                   {selectedInterests.join(", ")}
                 </span>
-
               ) : (
-
                 <span className="font-semibold text-red-600">
                   None selected
                 </span>
-
               )}
-
             </p>
-
 
           </div>
 
@@ -503,6 +519,7 @@ export default function AudienceClient({}: AudienceClientProps) {
 
         <div className="mt-14 flex justify-between">
 
+          {/* Back */}
 
           <Link
             href="/onboarding/video"
@@ -512,40 +529,43 @@ export default function AudienceClient({}: AudienceClientProps) {
           </Link>
 
 
+          {/* Right-side button */}
 
-          <button
-            type="button"
-            disabled={!canContinue}
-            onClick={async () => {
+          {fromReview ? (
 
-              if (!canContinue) return;
+            <button
+              type="button"
+              disabled={!canContinue || isSaving}
+              onClick={saveAudienceAndReturnToReview}
+              className={`rounded-xl px-10 py-4 font-semibold transition ${
+                canContinue && !isSaving
+                  ? "bg-red-600 text-white hover:bg-red-700"
+                  : "cursor-not-allowed bg-gray-300 text-white"
+              }`}
+            >
+              {isSaving ? "Saving..." : "Back to Review"}
+            </button>
 
-              await saveCampaignAudience({
-                country,
-                language,
-                gender,
-                ageGroups: selectedAges,
-                interests: selectedInterests,
-              });
+          ) : (
 
-              window.location.href = "/onboarding/review";
+            <button
+              type="button"
+              disabled={!canContinue || isSaving}
+              onClick={handleContinue}
+              className={`rounded-xl px-10 py-4 font-semibold transition ${
+                canContinue && !isSaving
+                  ? "bg-red-600 text-white hover:bg-red-700"
+                  : "cursor-not-allowed bg-gray-300 text-white"
+              }`}
+            >
+              {isSaving ? "Saving..." : "Continue"}
+            </button>
 
-            }}
-            className={`rounded-xl px-10 py-4 font-semibold transition ${
-              canContinue
-                ? "bg-red-600 text-white hover:bg-red-700"
-                : "cursor-not-allowed bg-gray-300 text-white"
-            }`}
-          >
-            Continue
-          </button>
-
+          )}
 
         </div>
 
-
       </div>
-
     </main>
   );
 }

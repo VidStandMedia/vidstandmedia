@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 import OnboardingProgress from "@/components/OnboardingProgress";
 import { saveCampaignGoal } from "@/app/actions/campaign";
@@ -26,15 +26,51 @@ const goals = [
 ];
 
 export default function GoalsPage() {
-  const [selectedGoal, setSelectedGoal] = useState<string | null>(null);
+  const searchParams = useSearchParams();
 
-  const router = useRouter();
+  const fromReview =
+    searchParams.get("from") === "review";
+
+  const [selectedGoal, setSelectedGoal] =
+    useState<string | null>(null);
+
+  const [isSaving, setIsSaving] =
+    useState(false);
+
+  async function handleSave() {
+    if (!selectedGoal || isSaving) return;
+
+    setIsSaving(true);
+
+    try {
+      await saveCampaignGoal(selectedGoal);
+
+      if (fromReview) {
+        window.location.href =
+          "/onboarding/review";
+      } else {
+        window.location.href =
+          "/onboarding/budget";
+      }
+
+    } catch (error) {
+      console.error(
+        "Failed to save campaign goal:",
+        error
+      );
+
+      setIsSaving(false);
+    }
+  }
 
   return (
     <main className="bg-white py-24 px-6">
+
       <div className="mx-auto max-w-4xl">
 
-        <OnboardingProgress currentStep="goals" />
+        <OnboardingProgress
+          currentStep="goals"
+        />
 
         <h1 className="text-center text-5xl font-bold text-black">
           Choose Your Promotion Goal
@@ -46,6 +82,9 @@ export default function GoalsPage() {
           campaign for your video.
         </p>
 
+
+        {/* Goals */}
+
         <div className="mt-14 grid gap-8">
 
           {goals.map((goal) => (
@@ -53,14 +92,14 @@ export default function GoalsPage() {
             <button
               key={goal.title}
               type="button"
-              onClick={() => setSelectedGoal(goal.title)}
-              className={`rounded-2xl border p-8 text-left transition
-                ${
-                  selectedGoal === goal.title
-                    ? "border-green-600 bg-green-50 shadow-lg"
-                    : "border-gray-300 hover:border-green-600 hover:bg-green-50 hover:shadow-lg"
-                }
-              `}
+              onClick={() =>
+                setSelectedGoal(goal.title)
+              }
+              className={`rounded-2xl border p-8 text-left transition ${
+                selectedGoal === goal.title
+                  ? "border-green-600 bg-green-50 shadow-lg"
+                  : "border-gray-300 hover:border-green-600 hover:bg-green-50 hover:shadow-lg"
+              }`}
             >
 
               <h2 className="text-2xl font-bold text-black">
@@ -71,12 +110,20 @@ export default function GoalsPage() {
                 {goal.description}
               </p>
 
+              {selectedGoal === goal.title && (
+                <p className="mt-4 text-sm font-semibold text-green-700">
+                  ✓ Selected
+                </p>
+              )}
+
             </button>
 
           ))}
 
         </div>
 
+
+        {/* Navigation */}
 
         <div className="mt-14 flex justify-between">
 
@@ -90,31 +137,25 @@ export default function GoalsPage() {
 
           <button
             type="button"
-            disabled={!selectedGoal}
-            onClick={async () => {
-
-              if (!selectedGoal) return;
-
-              await saveCampaignGoal(selectedGoal);
-
-              router.push("/onboarding/budget");
-
-            }}
-            className={`rounded-xl px-10 py-4 font-semibold transition
-              ${
-                selectedGoal
-                  ? "bg-red-600 text-white hover:bg-red-700"
-                  : "cursor-not-allowed bg-gray-300 text-white"
-              }
-            `}
+            disabled={!selectedGoal || isSaving}
+            onClick={handleSave}
+            className={`rounded-xl px-10 py-4 font-semibold transition ${
+              selectedGoal && !isSaving
+                ? "bg-red-600 text-white hover:bg-red-700"
+                : "cursor-not-allowed bg-gray-300 text-white"
+            }`}
           >
-            Continue
+            {isSaving
+              ? "Saving..."
+              : fromReview
+                ? "Back to Review"
+                : "Continue"}
           </button>
-
 
         </div>
 
       </div>
+
     </main>
   );
 }

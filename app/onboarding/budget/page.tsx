@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import OnboardingProgress from "@/components/OnboardingProgress";
 import { saveCampaignBudget } from "@/app/actions/campaign";
@@ -14,10 +14,19 @@ const budgets = [
 ];
 
 export default function BudgetPage() {
-  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const [selectedBudget, setSelectedBudget] = useState<string | null>(null);
-  const [customBudget, setCustomBudget] = useState("");
+  const fromReview =
+    searchParams.get("from") === "review";
+
+  const [selectedBudget, setSelectedBudget] =
+    useState<string | null>(null);
+
+  const [customBudget, setCustomBudget] =
+    useState("");
+
+  const [isSaving, setIsSaving] =
+    useState(false);
 
   const customAmount = Number(customBudget);
 
@@ -28,7 +37,36 @@ export default function BudgetPage() {
 
   const selected =
     selectedBudget ||
-    (validCustomBudget ? `$${customAmount}/week` : null);
+    (validCustomBudget
+      ? `$${customAmount}/week`
+      : null);
+
+
+  async function handleSave() {
+    if (!selected || isSaving) return;
+
+    setIsSaving(true);
+
+    try {
+      await saveCampaignBudget(selected);
+
+      if (fromReview) {
+        window.location.href =
+          "/onboarding/review";
+      } else {
+        window.location.href =
+          "/onboarding/video";
+      }
+
+    } catch (error) {
+      console.error(
+        "Failed to save campaign budget:",
+        error
+      );
+
+      setIsSaving(false);
+    }
+  }
 
 
   return (
@@ -36,7 +74,9 @@ export default function BudgetPage() {
 
       <div className="mx-auto max-w-4xl">
 
-        <OnboardingProgress currentStep="budget" />
+        <OnboardingProgress
+          currentStep="budget"
+        />
 
 
         <h1 className="text-center text-5xl font-bold text-black">
@@ -63,13 +103,11 @@ export default function BudgetPage() {
                 setSelectedBudget(budget);
                 setCustomBudget("");
               }}
-              className={`rounded-2xl border p-8 text-center text-2xl font-bold text-black transition
-              ${
+              className={`rounded-2xl border p-8 text-center text-2xl font-bold text-black transition ${
                 selectedBudget === budget
                   ? "border-green-600 bg-green-50 shadow-lg"
                   : "border-gray-300 hover:border-green-600 hover:bg-green-50"
-              }
-              `}
+              }`}
             >
               {budget}
             </button>
@@ -83,7 +121,7 @@ export default function BudgetPage() {
 
         <div className="mt-10 rounded-2xl border border-gray-300 p-8">
 
-          <h2 className="text-2xl font-bold text-black text-center">
+          <h2 className="text-center text-2xl font-bold text-black">
             Select Custom Price
           </h2>
 
@@ -106,7 +144,9 @@ export default function BudgetPage() {
                 type="number"
                 value={customBudget}
                 onChange={(e) => {
-                  setCustomBudget(e.target.value);
+                  setCustomBudget(
+                    e.target.value
+                  );
                   setSelectedBudget(null);
                 }}
                 placeholder="Weekly budget"
@@ -125,14 +165,16 @@ export default function BudgetPage() {
           </div>
 
 
-          {customBudget !== "" && !validCustomBudget && (
+          {customBudget !== "" &&
+            !validCustomBudget && (
+
             <p className="mt-4 text-center text-red-600">
               Please enter a weekly budget between $50 and $5,000.
             </p>
+
           )}
 
         </div>
-
 
 
         {/* Navigation */}
@@ -148,26 +190,21 @@ export default function BudgetPage() {
           </Link>
 
 
-
           <button
             type="button"
-            disabled={!selected}
-            onClick={async () => {
-              if (!selected) return;
-
-              await saveCampaignBudget(selected);
-
-              router.push("/onboarding/video");
-            }}
-            className={`rounded-xl px-10 py-4 font-semibold transition
-            ${
-              selected
+            disabled={!selected || isSaving}
+            onClick={handleSave}
+            className={`rounded-xl px-10 py-4 font-semibold transition ${
+              selected && !isSaving
                 ? "bg-red-600 text-white hover:bg-red-700"
                 : "cursor-not-allowed bg-gray-300 text-white"
-            }
-            `}
+            }`}
           >
-            Continue
+            {isSaving
+              ? "Saving..."
+              : fromReview
+                ? "Back to Review"
+                : "Continue"}
           </button>
 
 

@@ -1,5 +1,12 @@
 import AudienceClient from "./AudienceClient";
+import { getCampaign } from "@/app/actions/campaign";
 
-export default function AudiencePage() {
-  return <AudienceClient />;
+export default async function AudiencePage() {
+  const campaign = await getCampaign();
+
+  return (
+    <AudienceClient
+      initialAudience={campaign.audience}
+    />
+  );
 }

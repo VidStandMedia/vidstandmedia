@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { signOut } from "next-auth/react";
 import OnboardingProgress from "@/components/OnboardingProgress";
 import Image from "next/image";
 import { Session } from "next-auth";
@@ -15,29 +17,61 @@ export default function OnboardingClient({
   session,
   channel,
 }: OnboardingClientProps) {
+  const searchParams = useSearchParams();
+
+  const fromReview =
+    searchParams.get("from") === "review";
+
   const [saving, setSaving] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
 
   const youtubeConnected =
     !!channel?.snippet?.title &&
     !!channel?.snippet?.thumbnails?.high?.url;
 
   async function handleContinue() {
-    if (!channel || !youtubeConnected) {
+    if (!channel || !youtubeConnected || saving) {
       return;
     }
 
     setSaving(true);
 
-    await saveCampaignChannel({
-      id: channel.id,
-      title: channel.snippet.title,
-      thumbnail:
-        channel.snippet.thumbnails.high.url,
-      email: session.user?.email ?? "",
-    });
+    try {
+      await saveCampaignChannel({
+        id: channel.id,
+        title: channel.snippet.title,
+        thumbnail:
+          channel.snippet.thumbnails.high.url,
+        email: session.user?.email ?? "",
+      });
 
-    window.location.href =
-      "/onboarding/google-ads";
+      if (fromReview) {
+        window.location.href =
+          "/onboarding/review";
+      } else {
+        window.location.href =
+          "/onboarding/google-ads";
+      }
+    } catch (error) {
+      console.error(
+        "Failed to save YouTube channel:",
+        error
+      );
+
+      setSaving(false);
+    }
+  }
+
+  async function handleChangeChannel() {
+    if (signingOut) {
+      return;
+    }
+
+    setSigningOut(true);
+
+    await signOut({
+      callbackUrl: "/login",
+    });
   }
 
   function handleBackToGoogleSignIn() {
@@ -46,6 +80,7 @@ export default function OnboardingClient({
 
   return (
     <main className="bg-white px-6 py-24">
+
       <div className="mx-auto max-w-3xl text-center">
 
         <OnboardingProgress currentStep="login" />
@@ -61,6 +96,7 @@ export default function OnboardingClient({
           videos, and audience before reviewing
           everything together.
         </p>
+
 
         {/* Google / YouTube connection warning */}
 
@@ -115,6 +151,7 @@ export default function OnboardingClient({
 
           </div>
         )}
+
 
         {/* Connected Account */}
 
@@ -175,6 +212,7 @@ export default function OnboardingClient({
 
           </div>
 
+
           {/* Connection Status */}
 
           <div className="mt-8 flex flex-col items-center space-y-3 text-center text-lg">
@@ -215,9 +253,44 @@ export default function OnboardingClient({
 
           </div>
 
+
+          {/* Change YouTube Channel */}
+
+          {fromReview && youtubeConnected && (
+            <div className="mt-10 border-t border-gray-200 pt-8">
+
+              <h3 className="text-xl font-bold text-black">
+                Want to use a different YouTube channel?
+              </h3>
+
+              <p className="mt-3 text-gray-700">
+                Sign out of your current Google account and
+                sign in with the Google account connected to
+                the YouTube channel you'd like to use.
+              </p>
+
+              <button
+                type="button"
+                onClick={handleChangeChannel}
+                disabled={signingOut}
+                className={`mt-6 rounded-xl border border-gray-400 px-8 py-3 font-semibold text-black transition ${
+                  signingOut
+                    ? "cursor-not-allowed bg-gray-100 text-gray-400"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                {signingOut
+                  ? "Signing Out..."
+                  : "Sign Out & Change YouTube Channel"}
+              </button>
+
+            </div>
+          )}
+
         </div>
 
-        {/* Continue Button */}
+
+        {/* Continue / Back to Review Button */}
 
         <div className="mt-16">
 
@@ -235,12 +308,15 @@ export default function OnboardingClient({
           >
             {saving
               ? "Saving..."
-              : "Continue"}
+              : fromReview
+                ? "Back to Review"
+                : "Continue"}
           </button>
 
         </div>
 
       </div>
+
     </main>
   );
 }
