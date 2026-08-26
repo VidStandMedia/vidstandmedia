@@ -83,6 +83,19 @@ export default function ReviewClient({
               </p>
 
               <p className="mt-2 text-gray-700">
+                
+                  Google Ads Customer ID: 
+                
+                {campaign.googleAds.customerId ? (
+                  campaign.googleAds.customerId
+                ) : (
+                  <span className="font-semibold text-red-600">
+                    Not connected
+                  </span>
+                )}
+              </p>
+
+              <p className="mt-2 text-gray-700">
                 Your connected YouTube account will be used to create your
                 advertising campaign.
               </p>
