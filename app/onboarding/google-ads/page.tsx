@@ -1,19 +1,13 @@
-import {
-  getCampaignSession,
-} from "@/lib/session/campaign";
+import { getCampaign } from "@/app/actions/campaign";
 
 import GoogleAdsClient from "./GoogleAdsClient";
 
-
 export default async function GoogleAdsPage() {
-
-  const session = await getCampaignSession();
+  const campaign = await getCampaign();
 
   return (
     <GoogleAdsClient
-      initialGoogleAds={
-        session.campaign.googleAds
-      }
+      initialGoogleAds={campaign.googleAds}
     />
   );
 }

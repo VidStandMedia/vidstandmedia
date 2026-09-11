@@ -23,27 +23,24 @@ model Campaign {
   userId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  goal      String
+  budget    String
 
-  goal   String
-  budget String
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  agreement CampaignAgreement?
+  audience  CampaignAudience?
+  business  CampaignBusiness?
   channel   CampaignChannel?
   googleAds CampaignGoogleAds?
-  business  CampaignBusiness?
-  video     CampaignVideo?
-  audience  CampaignAudience?
-  agreement CampaignAgreement?
   payment   CampaignPayment?
+  video     CampaignVideo?
 
   @@index([userId])
 }
 
 model CampaignChannel {
-  id         String @id @default(cuid())
-  campaignId String @unique
-
+  id               String @id @default(cuid())
+  campaignId       String @unique
   youtubeChannelId String
   title            String
   thumbnail        String
@@ -53,25 +50,24 @@ model CampaignChannel {
 }
 
 model CampaignGoogleAds {
-  id         String @id @default(cuid())
-  campaignId String @unique
-
-  hasAccount             Boolean?
-  customerId             String
-  accountName            String
-  currency               String
-  timeZone               String
-  verified               Boolean
-  managerInvitationSent  Boolean
-  managerAccessAccepted  Boolean
+  id                    String   @id @default(cuid())
+  campaignId            String   @unique
+  hasAccount            Boolean?
+  customerId            String
+  accountName           String
+  currency              String
+  timeZone              String
+  verified              Boolean
+  managerInvitationSent Boolean
+  managerAccessAccepted Boolean
 
   campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
 }
 
 model CampaignBusiness {
-  id         String @id @default(cuid())
-  campaignId String @unique
-
+  id          String @id @default(cuid())
+  campaignId  String @unique
+  clientType  String @default("business")
   companyName String
   website     String
   category    String
@@ -81,37 +77,34 @@ model CampaignBusiness {
 }
 
 model CampaignVideo {
-  id         String @id @default(cuid())
-  campaignId String @unique
-
+  id             String @id @default(cuid())
+  campaignId     String @unique
   youtubeVideoId String
   title          String
   thumbnail      String
   publishedAt    String
-  viewCount     Int
+  viewCount      Int
   duration       String
-  privacyStatus String
+  privacyStatus  String
 
   campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
 }
 
 model CampaignAudience {
-  id         String @id @default(cuid())
-  campaignId String @unique
-
-  country   String
-  language  String
-  gender    String
-  ageGroups String[]
-  interests String[]
+  id         String   @id @default(cuid())
+  campaignId String   @unique
+  country    String
+  language   String
+  gender     String
+  ageGroups  String[]
+  interests  String[]
 
   campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
 }
 
 model CampaignAgreement {
-  id         String @id @default(cuid())
-  campaignId String @unique
-
+  id                    String    @id @default(cuid())
+  campaignId            String    @unique
   termsAccepted         Boolean
   privacyAccepted       Boolean
   advertisingAuthorized Boolean
@@ -121,21 +114,17 @@ model CampaignAgreement {
 }
 
 model CampaignPayment {
-  id         String @id @default(cuid())
-  campaignId String @unique
-
-  managementFee  Decimal @db.Decimal(10, 2)
-  managementPlan String
-
+  id                      String    @id @default(cuid())
+  campaignId              String    @unique
+  managementFee           Decimal   @db.Decimal(10, 2)
+  managementPlan          String
   stripeCheckoutSessionId String?
   stripeCustomerId        String?
   stripeSubscriptionId    String?
-
-  paymentStatus String
-  paidAt        DateTime?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  paymentStatus           String
+  paidAt                  DateTime?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
 
   campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
 

@@ -8,14 +8,32 @@ export async function GET() {
     const campaigns = await prisma.campaign.count();
     const payments = await prisma.campaignPayment.count();
 
+    const campaign = await prisma.campaign.findFirst({
+      orderBy: {
+        updatedAt: "desc",
+      },
+      include: {
+        channel: true,
+        googleAds: true,
+        business: true,
+        video: true,
+        audience: true,
+        agreement: true,
+        payment: true,
+      },
+    });
+
     return NextResponse.json({
       success: true,
       database: "connected",
+
       counts: {
         users,
         campaigns,
         payments,
       },
+
+      campaign,
     });
   } catch (error) {
     console.error("Database test failed:", error);

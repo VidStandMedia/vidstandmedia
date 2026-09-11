@@ -1,17 +1,13 @@
-import {
-  getCampaignSession,
-} from "@/lib/session/campaign";
+import { getCampaign } from "@/app/actions/campaign";
 
 import BusinessInformationClient from "./BusinessInformationClient";
 
 export default async function BusinessInformationPage() {
-  const session = await getCampaignSession();
+  const campaign = await getCampaign();
 
   return (
     <BusinessInformationClient
-      initialBusiness={
-        session.campaign.business
-      }
+      initialBusiness={campaign.business}
     />
   );
 }

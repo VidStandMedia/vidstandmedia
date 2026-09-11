@@ -1,22 +1,19 @@
 import Link from "next/link";
-import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 import OnboardingProgress from "@/components/OnboardingProgress";
 
 import {
-  getCampaignSession,
-} from "@/lib/session/campaign";
-
-import {
+  getCampaign,
   saveCampaignGoogleAds,
 } from "@/app/actions/campaign";
 
 export default async function ManagerAccessPage() {
-  const session = await getCampaignSession();
+  const campaign = await getCampaign();
 
-  const googleAds = session.campaign.googleAds;
+  const googleAds = campaign.googleAds;
 
-  async function sendManagerRequest() {
+  async function continueToBusinessInformation() {
     "use server";
 
     await saveCampaignGoogleAds({
@@ -25,118 +22,132 @@ export default async function ManagerAccessPage() {
       managerAccessAccepted: false,
     });
 
-    revalidatePath("/onboarding/manager-access");
+    redirect("/onboarding/business-information");
   }
 
   return (
-    <main className="bg-white py-24 px-6">
+    <main className="bg-white px-6 py-24">
       <div className="mx-auto max-w-3xl">
 
         <OnboardingProgress currentStep="manager-access" />
 
-        <h1 className="mt-10 text-center text-5xl font-bold text-black">
-          Connect VidStandMedia to Your Google Ads Account
-        </h1>
+        {/* PAGE HEADER */}
 
-        <p className="mt-6 text-center text-lg text-gray-700">
-          Your Google Ads account remains yours. You keep ownership
-          and billing control while VidStandMedia manages your
-          campaigns through manager access.
-        </p>
+        <div className="mt-10 text-center">
+          <h1 className="text-5xl font-bold leading-tight text-black">
+            Connect VidStandMedia to Your Google Ads Account
+          </h1>
 
-        <div className="mt-14 rounded-2xl border border-gray-300 bg-white p-8 shadow-sm">
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-700">
+            VidStandMedia will manage your advertising campaigns
+            through our Google Ads Manager Account. You will still
+            own your Google Ads account and remain in control of
+            your billing and payment information.
+          </p>
+        </div>
+
+        {/* GOOGLE ADS ACCOUNT */}
+
+        <div className="mt-12 rounded-2xl border border-gray-300 bg-white p-8 shadow-sm">
 
           <h2 className="text-2xl font-bold text-black">
             Your Google Ads Account
           </h2>
 
-          <div className="mt-6 space-y-4">
-
+          <div className="mt-5 rounded-xl bg-gray-100 p-5">
             <p className="text-lg text-black">
               <span className="font-semibold">
                 Customer ID:
               </span>{" "}
-              {googleAds.customerId || "Not entered"}
+              {googleAds.customerId
+                ? googleAds.customerId.replace(
+                    /(\d{3})(\d{3})(\d{4})/,
+                    "$1-$2-$3"
+                  )
+                : "Not entered"}
             </p>
-
-            {googleAds.managerInvitationSent ? (
-              <div className="rounded-xl border border-green-300 bg-green-50 p-5">
-
-                <p className="font-semibold text-green-700">
-                  ✓ Manager invitation requested
-                </p>
-
-                <p className="mt-3 text-gray-700">
-                  VidStandMedia will send a manager access
-                  invitation to your Google Ads account.
-                  Accept the invitation in Google Ads to
-                  continue.
-                </p>
-
-              </div>
-            ) : (
-              <div className="rounded-xl border border-blue-200 bg-blue-50 p-5">
-
-                <p className="font-semibold text-black">
-                  Next step:
-                </p>
-
-                <p className="mt-3 text-gray-700">
-                  Request manager access so VidStandMedia
-                  can create and manage your advertising
-                  campaigns.
-                </p>
-
-              </div>
-            )}
-
           </div>
 
-          {!googleAds.managerInvitationSent && (
-            <form
-              action={sendManagerRequest}
-              className="mt-8"
-            >
-              <button
-                type="submit"
-                className="w-full rounded-xl bg-red-600 px-8 py-4 font-semibold text-white transition hover:bg-red-700"
-              >
-                Request Manager Access
-              </button>
-            </form>
-          )}
+          {/* HOW MANAGER ACCESS WORKS */}
+
+          <div className="mt-8">
+            <h3 className="text-xl font-bold text-black">
+              How Manager Access Works
+            </h3>
+
+            <p className="mt-4 leading-7 text-gray-700">
+              VidStandMedia will manage your Google Ads campaigns
+              through our Google Ads Manager Account. You will still
+              own your Google Ads account and remain in control of
+              your billing and payment information. Our Campaign
+              Management Fee is separate from your Advertising Budget.
+            </p>
+
+            <p className="mt-4 leading-7 text-gray-700">
+              To connect your account, we will send a manager access
+              invitation to the Customer ID you provided above. When
+              you receive the invitation, sign in to Google Ads using
+              the Google account that has access to your account and
+              accept the invitation.
+            </p>
+
+            <p className="mt-4 leading-7 text-gray-700">
+              Once you accept the invitation, VidStandMedia can
+              manage your campaigns, including setting up, targeting,
+              monitoring, and optimizing your ads based on your goals
+              and budget.
+            </p>
+
+            <p className="mt-4 leading-7 text-gray-700">
+              Your Google Ads account stays yours. Your payment
+              information remains under your control, and Google will
+              bill you directly for your advertising costs. Your
+              Advertising Budget does not pass through VidStandMedia.
+            </p>
+          </div>
+
+          {/* WHAT YOU NEED TO DO */}
+
+          <div className="mt-8 rounded-xl border border-green-200 bg-green-50 p-6">
+            <h3 className="text-lg font-bold text-black">
+              What You Need to Do
+            </h3>
+
+            <ol className="mt-4 space-y-3 text-gray-700">
+              <li className="flex gap-3">
+                <span className="font-bold text-black">1.</span>
+                <span>
+                  Within 48 hours of your payment of the Campaign
+                  Management Fee, VidStandMedia will send a manager
+                  access invitation to your Google Ads account using
+                  the Customer ID you provided above.
+                </span>
+              </li>
+
+              <li className="flex gap-3">
+                <span className="font-bold text-black">2.</span>
+                <span>
+                  When you receive the invitation, sign in to Google
+                  Ads using the Google account that has access to your
+                  account and accept the invitation.
+                </span>
+              </li>
+
+              <li className="flex gap-3">
+                <span className="font-bold text-black">3.</span>
+                <span>
+                  Once you accept the invitation, VidStandMedia can
+                  begin managing your Google Ads campaigns.
+                </span>
+              </li>
+            </ol>
+          </div>
 
         </div>
 
-        <div className="mt-8 rounded-2xl border border-gray-300 bg-white p-8">
+        {/* NAVIGATION */}
 
-          <h2 className="text-2xl font-bold text-black">
-            What happens next?
-          </h2>
-
-          <div className="mt-5 space-y-3 text-gray-700">
-
-            <p>
-              ✓ You remain the owner of your Google Ads account.
-            </p>
-
-            <p>
-              ✓ Google continues billing you directly.
-            </p>
-
-            <p>
-              ✓ VidStandMedia manages campaign setup and optimization.
-            </p>
-
-            <p>
-              ✓ Your advertising budget never passes through VidStandMedia.
-            </p>
-
-          </div>
-
-        </div>
-
-        <div className="mt-14 flex justify-between">
+        <div className="mt-14 flex items-center justify-between">
 
           <Link
             href="/onboarding/google-ads"
@@ -145,16 +156,14 @@ export default async function ManagerAccessPage() {
             Back
           </Link>
 
-          <Link
-            href="/onboarding/business-information"
-            className={`rounded-xl px-10 py-4 font-semibold text-white transition ${
-              googleAds.managerInvitationSent
-                ? "bg-red-600 hover:bg-red-700"
-                : "pointer-events-none bg-gray-300"
-            }`}
-          >
-            Continue
-          </Link>
+          <form action={continueToBusinessInformation}>
+            <button
+              type="submit"
+              className="rounded-xl bg-red-600 px-10 py-4 font-semibold text-white transition hover:bg-red-700"
+            >
+              Continue
+            </button>
+          </form>
 
         </div>
 

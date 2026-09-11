@@ -128,7 +128,7 @@ export default function GoalsPage() {
         <div className="mt-14 flex justify-between">
 
           <Link
-            href="/onboarding"
+            href="/onboarding/business-information"
             className="rounded-xl border border-gray-300 px-8 py-4 font-semibold text-black hover:bg-gray-100"
           >
             Back

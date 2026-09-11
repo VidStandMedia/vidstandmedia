@@ -23,6 +23,7 @@ export type CampaignGoogleAds = {
 };
 
 export type CampaignBusiness = {
+  clientType: "business" | "creator";
   companyName: string;
   website: string;
   category: string;
@@ -126,11 +127,12 @@ function createEmptyCampaign(): Campaign {
     },
 
     business: {
-      companyName: "",
-      website: "",
-      category: "",
-      timeZone: "",
-    },
+  clientType: "business",
+  companyName: "",
+  website: "",
+  category: "",
+  timeZone: "",
+},
 
     video: {
       id: randomUUID(),
