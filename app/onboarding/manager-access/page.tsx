@@ -76,34 +76,17 @@ export default async function ManagerAccessPage() {
             </h3>
 
             <p className="mt-4 leading-7 text-gray-700">
-              VidStandMedia will manage your Google Ads campaigns
-              through our Google Ads Manager Account. You will still
-              own your Google Ads account and remain in control of
-              your billing and payment information. Our Campaign
-              Management Fee is separate from your Advertising Budget.
+              VidStandMedia will manage your Google Ads campaigns through our Google Ads Manager Account. You keep ownership of your Google Ads account and remain in control of your payment information.
             </p>
 
             <p className="mt-4 leading-7 text-gray-700">
-              To connect your account, we will send a manager access
-              invitation to the Customer ID you provided above. When
-              you receive the invitation, sign in to Google Ads using
-              the Google account that has access to your account and
-              accept the invitation.
+              Your Campaign Management Fee is paid to VidStandMedia and is separate from your Advertising Budget, which is paid directly to Google. Your advertising budget does not pass through VidStandMedia.
             </p>
 
             <p className="mt-4 leading-7 text-gray-700">
-              Once you accept the invitation, VidStandMedia can
-              manage your campaigns, including setting up, targeting,
-              monitoring, and optimizing your ads based on your goals
-              and budget.
+              After your Campaign Management Fee is paid, we will send a manager access invitation to the Google Ads Customer ID you provided. Once access is approved, VidStandMedia can set up, manage, monitor, and optimize your campaigns based on your goals and budget.
             </p>
 
-            <p className="mt-4 leading-7 text-gray-700">
-              Your Google Ads account stays yours. Your payment
-              information remains under your control, and Google will
-              bill you directly for your advertising costs. Your
-              Advertising Budget does not pass through VidStandMedia.
-            </p>
           </div>
 
           {/* WHAT YOU NEED TO DO */}
@@ -117,27 +100,21 @@ export default async function ManagerAccessPage() {
               <li className="flex gap-3">
                 <span className="font-bold text-black">1.</span>
                 <span>
-                  Within 48 hours of your payment of the Campaign
-                  Management Fee, VidStandMedia will send a manager
-                  access invitation to your Google Ads account using
-                  the Customer ID you provided above.
+                  Complete the Campaign Setup and pay your Campaign Management Fee. VidStandMedia will send your manager access invitation within 48 hours of payment.
                 </span>
               </li>
 
               <li className="flex gap-3">
                 <span className="font-bold text-black">2.</span>
                 <span>
-                  When you receive the invitation, sign in to Google
-                  Ads using the Google account that has access to your
-                  account and accept the invitation.
+                  Check your Google Ads account. Sign in using the Google account that has access to the Customer ID you provided.
                 </span>
               </li>
 
               <li className="flex gap-3">
                 <span className="font-bold text-black">3.</span>
                 <span>
-                  Once you accept the invitation, VidStandMedia can
-                  begin managing your Google Ads campaigns.
+                  Approve manager access. Follow the instructions in the invitation to give VidStandMedia access to manage your campaigns.
                 </span>
               </li>
             </ol>
