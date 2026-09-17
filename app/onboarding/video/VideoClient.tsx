@@ -181,6 +181,25 @@ export default function VideoClient({
           Select the YouTube video you'd like to promote.
         </p>
 
+        {/* Google Ads Video Policy Notice */}
+
+        <div className="mx-auto mt-6 max-w-3xl rounded-xl border border-gray-300 bg-gray-50 p-5 text-center">
+
+          <p className="text-gray-700">
+            Make sure your video follows Google's advertising
+            policies and terms before promoting it.
+          </p>
+
+          <a
+            href="https://support.google.com/adspolicy/answer/6008942"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-block rounded-lg border border-green-600 px-5 py-2.5 font-semibold text-green-700 transition hover:bg-green-600 hover:text-white"
+          >
+            View Google's Video Ad Policies ↗
+          </a>
+
+        </div>
 
         {/* Search and Sort */}
 
@@ -223,7 +242,6 @@ export default function VideoClient({
           </select>
 
         </div>
-
 
         {/* Video Cards */}
 
@@ -300,7 +318,6 @@ export default function VideoClient({
 
               </div>
 
-
               {/* Card Footer */}
 
               <div className="flex items-center justify-between border-t border-gray-200 px-6 py-4">
@@ -332,7 +349,6 @@ export default function VideoClient({
 
           ))}
 
-
           {filteredVideos.length === 0 && (
 
             <div className="col-span-full rounded-2xl border border-gray-300 p-10 text-center">
@@ -351,7 +367,6 @@ export default function VideoClient({
 
         </div>
 
-
         {/* Navigation */}
 
         <div className="mt-14 flex justify-between">
@@ -362,7 +377,6 @@ export default function VideoClient({
           >
             Back
           </Link>
-
 
           {fromReview ? (
 

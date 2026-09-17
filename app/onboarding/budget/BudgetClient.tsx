@@ -33,14 +33,13 @@ export default function BudgetPage() {
   const validCustomBudget =
     customBudget !== "" &&
     customAmount >= 50 &&
-    customAmount <= 5000;
+    customAmount <= 10000;
 
   const selected =
     selectedBudget ||
     (validCustomBudget
       ? `$${customAmount}/week`
       : null);
-
 
   async function handleSave() {
     if (!selected || isSaving) return;
@@ -68,7 +67,6 @@ export default function BudgetPage() {
     }
   }
 
-
   return (
     <main className="bg-white py-24 px-6">
 
@@ -78,17 +76,16 @@ export default function BudgetPage() {
           currentStep="budget"
         />
 
-
         <h1 className="text-center text-5xl font-bold text-black">
           Choose Your Advertising Budget
         </h1>
 
-
         <p className="mt-6 text-center text-lg text-gray-700">
           Select your weekly advertising budget. You can adjust your campaign
-          spending before your promotion launches.
+          spending before your promotion launches. Your Advertising Budget is
+          paid directly to Google and is separate from your Campaign Management
+          Fee, which is paid to VidStandMedia.
         </p>
-
 
         {/* Preset Budgets */}
 
@@ -116,7 +113,6 @@ export default function BudgetPage() {
 
         </div>
 
-
         {/* Custom Budget */}
 
         <div className="mt-10 rounded-2xl border border-gray-300 p-8">
@@ -125,11 +121,9 @@ export default function BudgetPage() {
             Select Custom Price
           </h2>
 
-
           <p className="mt-3 text-center text-gray-700">
-            Enter a weekly budget between $50 and $5,000.
+            Enter a weekly budget between $50 and $10,000.
           </p>
-
 
           <div className="mt-6 flex justify-center">
 
@@ -138,7 +132,6 @@ export default function BudgetPage() {
               <span className="text-xl text-black">
                 $
               </span>
-
 
               <input
                 type="number"
@@ -152,9 +145,8 @@ export default function BudgetPage() {
                 placeholder="Weekly budget"
                 className="w-48 px-3 py-3 text-lg text-black outline-none"
                 min="50"
-                max="5000"
+                max="10000"
               />
-
 
               <span className="text-lg text-black">
                 /week
@@ -164,31 +156,31 @@ export default function BudgetPage() {
 
           </div>
 
-
           {customBudget !== "" &&
             !validCustomBudget && (
 
             <p className="mt-4 text-center text-red-600">
-              Please enter a weekly budget between $50 and $5,000.
+              Please enter a weekly budget between $50 and $10,000.
             </p>
 
           )}
 
         </div>
 
-
         {/* Navigation */}
 
         <div className="mt-14 flex justify-between">
 
-
           <Link
-  href={fromReview ? "/onboarding/review" : "/onboarding/goals"}
-  className="rounded-xl border border-gray-300 px-8 py-4 font-semibold text-black hover:bg-gray-100"
->
-  Back
-</Link>
-
+            href={
+              fromReview
+                ? "/onboarding/review"
+                : "/onboarding/goals"
+            }
+            className="rounded-xl border border-gray-300 px-8 py-4 font-semibold text-black hover:bg-gray-100"
+          >
+            Back
+          </Link>
 
           <button
             type="button"
@@ -207,9 +199,7 @@ export default function BudgetPage() {
                 : "Continue"}
           </button>
 
-
         </div>
-
 
       </div>
 

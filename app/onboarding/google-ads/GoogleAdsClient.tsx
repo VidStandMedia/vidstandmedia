@@ -39,26 +39,19 @@ const customerIdDigits = customerId.replace(/\D/g, "");
 const customerIdIsValid =
 customerIdDigits.length === 10;
 
-function handleCustomerIdChange(
-value: string
-) {
+function handleCustomerIdChange(value: string) {
 const digitsOnly = value
 .replace(/\D/g, "")
 .slice(0, 10);
 
-
 setCustomerId(digitsOnly);
-
 
 }
 
-function formatCustomerId(
-value: string
-) {
+function formatCustomerId(value: string) {
 const digits = value
 .replace(/\D/g, "")
 .slice(0, 10);
-
 
 if (digits.length <= 3) {
   return digits;
@@ -73,14 +66,12 @@ return `${digits.slice(0, 3)}-${digits.slice(
   6
 )}-${digits.slice(6)}`;
 
-
 }
 
 async function handleContinue() {
 if (hasAccount === null) {
 return;
 }
-
 
 if (
   hasAccount === true &&
@@ -119,7 +110,6 @@ router.push(
   "/onboarding/manager-access"
 );
 
-
 }
 
 const continueDisabled =
@@ -128,10 +118,7 @@ hasAccount === null ||
 (hasAccount === true &&
 !customerIdIsValid);
 
-return ( <main className="bg-white py-24 px-6">
-
-
-  <div className="mx-auto max-w-4xl">
+return ( <main className="bg-white py-24 px-6"> <div className="mx-auto max-w-4xl">
 
     <OnboardingProgress
       currentStep="google-ads"
@@ -145,13 +132,15 @@ return ( <main className="bg-white py-24 px-6">
       Your Google Ads account remains yours.
       Google charges you directly for advertising,
       while VidStandMedia manages your campaigns
-      through manager access.
+      through manager access. Your connected YouTube
+      account will be used to create your advertising
+      campaign.
     </p>
 
     <div className="mt-14 rounded-2xl border border-gray-300 bg-white p-8 shadow-sm">
 
       <h2 className="text-2xl font-bold text-black">
-        Do you already have a Google Ads account?
+        Do you already have a Google Ads account for your YouTube Channel?
       </h2>
 
       <p className="mt-4 text-gray-700">
@@ -173,7 +162,6 @@ return ( <main className="bg-white py-24 px-6">
               : "border-gray-300 hover:border-green-400"
           }`}
         >
-
           <h3 className="text-xl font-bold text-black">
             Yes
           </h3>
@@ -182,7 +170,6 @@ return ( <main className="bg-white py-24 px-6">
             I already have a Google Ads account
             and know my Customer ID.
           </p>
-
         </button>
 
         {/* NO */}
@@ -198,7 +185,6 @@ return ( <main className="bg-white py-24 px-6">
               : "border-gray-300 hover:border-green-400"
           }`}
         >
-
           <h3 className="text-xl font-bold text-black">
             No
           </h3>
@@ -206,7 +192,6 @@ return ( <main className="bg-white py-24 px-6">
           <p className="mt-3 text-gray-700">
             I need help creating a Google Ads account.
           </p>
-
         </button>
 
       </div>
@@ -214,7 +199,6 @@ return ( <main className="bg-white py-24 px-6">
       {/* EXISTING GOOGLE ADS ACCOUNT */}
 
       {hasAccount === true && (
-
         <div className="mt-10">
 
           <label
@@ -274,13 +258,11 @@ return ( <main className="bg-white py-24 px-6">
           </div>
 
         </div>
-
       )}
 
       {/* NO GOOGLE ADS ACCOUNT */}
 
       {hasAccount === false && (
-
         <div className="mt-10 rounded-xl bg-gray-50 p-6">
 
           <h3 className="text-xl font-bold text-black">
@@ -323,7 +305,6 @@ return ( <main className="bg-white py-24 px-6">
           </p>
 
         </div>
-
       )}
 
       {/* NAVIGATION */}
@@ -343,11 +324,9 @@ return ( <main className="bg-white py-24 px-6">
           disabled={continueDisabled}
           className="rounded-xl bg-red-600 px-10 py-4 font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
-
           {loading
             ? "Saving..."
             : "Continue"}
-
         </button>
 
       </div>
@@ -355,7 +334,6 @@ return ( <main className="bg-white py-24 px-6">
     </div>
 
   </div>
-
 </main>
 
 );
