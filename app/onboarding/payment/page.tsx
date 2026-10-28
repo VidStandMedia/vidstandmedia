@@ -1,12 +1,8 @@
-import { getCampaignSession } from "@/lib/session/campaign";
+import { getCampaign } from "@/app/actions/campaign";
 import PaymentClient from "./PaymentClient";
 
 export default async function PaymentPage() {
-  const session = await getCampaignSession();
+  const campaign = await getCampaign();
 
-  return (
-    <PaymentClient
-      campaign={session.campaign}
-    />
-  );
+  return <PaymentClient campaign={campaign} />;
 }

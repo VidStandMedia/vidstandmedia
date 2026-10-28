@@ -375,7 +375,7 @@ export default function ReviewClient({
 
         {/* Campaign Ready */}
 
-        <div className="mt-8 rounded-2xl border border-green-300 bg-green-50 p-8">
+        <div className="mt-8 rounded-2xl border border-green-700 bg-green-50 p-8">
 
           <h2 className="text-2xl font-bold text-green-700">
             ✓ Campaign Ready

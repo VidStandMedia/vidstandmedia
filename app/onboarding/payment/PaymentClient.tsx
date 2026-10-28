@@ -273,49 +273,6 @@ export default function PaymentClient({
 
         </div>
 
-        {/* Billing Explanation */}
-
-        <div className="mt-10 rounded-2xl border border-blue-200 bg-blue-50 p-8">
-
-          <h2 className="text-2xl font-bold text-black">
-            How billing works
-          </h2>
-
-          <div className="mt-6 space-y-5 text-gray-700">
-
-            <div>
-
-              <p className="font-bold text-black">
-                Google Ads advertising
-              </p>
-
-              <p className="mt-1">
-                Google charges your Google Ads payment
-                method directly for your advertising costs.
-                VidStandMedia does not collect or hold your
-                Google Ads advertising budget.
-              </p>
-
-            </div>
-
-            <div>
-
-              <p className="font-bold text-black">
-                VidStandMedia management
-              </p>
-
-              <p className="mt-1">
-                VidStandMedia charges a separate management
-                fee through Stripe for managing and optimizing
-                your advertising campaigns.
-              </p>
-
-            </div>
-
-          </div>
-
-        </div>
-
         {/* Campaign Summary */}
 
         <div className="mt-10 rounded-2xl border border-gray-300 bg-white p-8 shadow-sm">
@@ -425,7 +382,7 @@ export default function PaymentClient({
         <div className="mt-10 rounded-2xl border border-amber-200 bg-amber-50 p-8">
 
           <h2 className="text-xl font-bold text-black">
-            Before you continue
+            How billing works
           </h2>
 
           <div className="mt-4 space-y-3 text-gray-700">

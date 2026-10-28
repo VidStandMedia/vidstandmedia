@@ -194,7 +194,7 @@ export default function VideoClient({
             href="https://support.google.com/adspolicy/answer/6008942"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 inline-block rounded-lg border border-green-600 px-5 py-2.5 font-semibold text-green-700 transition hover:bg-green-600 hover:text-white"
+            className="mt-4 inline-block rounded-lg border border-green-600 px-5 py-2.5 font-semibold text-green-600 transition hover:bg-green-600 hover:text-white"
           >
             View Google's Video Ad Policies ↗
           </a>

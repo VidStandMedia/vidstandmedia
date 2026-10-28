@@ -89,6 +89,9 @@ export default function BudgetPage() {
 
         {/* Preset Budgets */}
 
+        
+        {/* Preset Budgets */}
+
         <div className="mt-14 grid gap-6">
 
           {budgets.map((budget) => (
@@ -107,11 +110,18 @@ export default function BudgetPage() {
               }`}
             >
               {budget}
+
+              {selectedBudget === budget && (
+                <p className="mt-4 text-sm font-semibold text-green-700">
+                  ✓ Selected
+                </p>
+              )}
             </button>
 
           ))}
 
         </div>
+
 
         {/* Custom Budget */}
 
