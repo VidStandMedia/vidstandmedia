@@ -137,14 +137,14 @@ export default async function PaymentSuccessPage({
 
           {/* Subscription Summary */}
 
-          <div className="mt-10 rounded-2xl border border-gray-200 bg-gray-50 p-6">
+          <div className="mt-10 rounded-2xl border border-gray-600 bg-gray-50 p-6">
             <h2 className="text-xl font-bold text-black">
               Your Subscription Summary
             </h2>
 
             <div className="mt-5 space-y-4">
               <div className="flex items-start justify-between gap-4">
-                <span className="text-gray-600">
+                <span className="text-gray-800">
                   Service
                 </span>
                 <span className="text-right font-semibold text-black">
@@ -153,7 +153,7 @@ export default async function PaymentSuccessPage({
               </div>
 
               <div className="flex items-start justify-between gap-4">
-                <span className="text-gray-600">
+                <span className="text-gray-800">
                   Management Fee
                 </span>
                 <span className="text-right font-semibold text-black">
@@ -162,7 +162,7 @@ export default async function PaymentSuccessPage({
               </div>
 
               <div className="flex items-start justify-between gap-4">
-                <span className="text-gray-600">
+                <span className="text-gray-800">
                   Payment Status
                 </span>
                 <span className="font-semibold text-green-700">
@@ -171,7 +171,7 @@ export default async function PaymentSuccessPage({
               </div>
             </div>
 
-            <p className="mt-5 border-t border-gray-200 pt-4 text-sm leading-6 text-gray-600">
+            <p className="mt-5 border-t border-gray-600 pt-4 text-sm leading-6 text-gray-800">
               Your management fee is separate from your
               Google Ads advertising budget. Google bills
               your Google Ads account directly for
@@ -181,7 +181,7 @@ export default async function PaymentSuccessPage({
 
           {/* What Happens Next */}
 
-          <div className="mt-8 rounded-2xl border border-blue-200 bg-blue-50 p-6 sm:p-8">
+          <div className="mt-8 rounded-2xl border border-green-600 bg-green-50 p-6 sm:p-8">
             <h2 className="text-2xl font-bold text-black">
               What happens next?
             </h2>
@@ -197,7 +197,7 @@ export default async function PaymentSuccessPage({
               {/* Step 1 */}
 
               <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-600 text-lg font-bold text-white">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-600 text-lg font-bold text-white">
                   1
                 </div>
 
@@ -217,7 +217,7 @@ export default async function PaymentSuccessPage({
               {/* Step 2 */}
 
               <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-600 text-lg font-bold text-white">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-600 text-lg font-bold text-white">
                   2
                 </div>
 
@@ -237,7 +237,7 @@ export default async function PaymentSuccessPage({
               {/* Step 3 */}
 
               <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-600 text-lg font-bold text-white">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-600 text-lg font-bold text-white">
                   3
                 </div>
 
@@ -256,7 +256,7 @@ export default async function PaymentSuccessPage({
               </div>
             </div>
 
-            <div className="mt-7 rounded-xl border border-blue-200 bg-white p-4">
+            <div className="mt-7 rounded-xl border border-green-600 bg-white p-4">
               <p className="text-sm leading-6 text-gray-700">
                 <strong>Important:</strong> Please keep your
                 Google Ads account active and check your email

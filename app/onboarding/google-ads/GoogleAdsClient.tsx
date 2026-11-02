@@ -129,12 +129,13 @@ return ( <main className="bg-white py-24 px-6"> <div className="mx-auto max-w-4x
     </h1>
 
     <p className="mt-6 text-center text-lg text-gray-700">
-      Your Google Ads account remains yours.
-      Google charges you directly for advertising,
-      while VidStandMedia manages your campaigns
-      through manager access. Your connected YouTube
+      Your connected YouTube
       account will be used to create your advertising
       campaign.
+    </p>
+    
+    <p className="mt-1 text-center text-lg text-gray-700">
+      Your Google Ads account remains yours. Google charges you directly for advertising, while VidStandMedia manages your campaigns through manager access.
     </p>
 
     <div className="mt-14 rounded-2xl border border-gray-300 bg-white p-8 shadow-sm">

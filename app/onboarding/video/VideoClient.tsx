@@ -181,6 +181,10 @@ export default function VideoClient({
           Select the YouTube video you'd like to promote.
         </p>
 
+        <p className="mt-1 text-center text-lg text-gray-700">
+          Your video must be from the YouTube channel you connected during sign-in and the Google Ads account linked to the Customer ID you provided.
+        </p>
+
         {/* Google Ads Video Policy Notice */}
 
         <div className="mx-auto mt-6 max-w-3xl rounded-xl border border-gray-300 bg-gray-50 p-5 text-center">

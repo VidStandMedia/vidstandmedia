@@ -15,7 +15,9 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  campaigns Campaign[]
+  campaigns        Campaign[]
+  googleAccount    GoogleAccount?
+  channelAnalytics ChannelAnalytics[]
 }
 
 model Campaign {
@@ -131,4 +133,37 @@ model CampaignPayment {
   @@index([stripeCustomerId])
   @@index([stripeSubscriptionId])
   @@index([stripeCheckoutSessionId])
+}
+
+model GoogleAccount {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  providerAccountId     String   @unique
+  refreshTokenEncrypted String?
+  scope                 String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([providerAccountId])
+}
+
+model ChannelAnalytics {
+  id                         String   @id @default(cuid())
+  userId                     String
+  channelId                  String
+  snapshotDate               DateTime @db.Date
+  subscriberCount            BigInt
+  viewCount                  BigInt
+  videoCount                 Int
+  watchTimeMinutes           Float?
+  averageViewDurationSeconds Float?
+  createdAt                  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([channelId, snapshotDate])
+  @@index([userId, snapshotDate])
+  @@index([channelId])
 }
