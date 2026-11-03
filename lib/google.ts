@@ -1,3 +1,4 @@
+
 export async function refreshAccessToken(
   refreshToken: string
 ) {
@@ -10,20 +11,34 @@ export async function refreshAccessToken(
           "application/x-www-form-urlencoded",
       },
       body: new URLSearchParams({
-        client_id:
-          process.env.GOOGLE_CLIENT_ID!,
-        client_secret:
-          process.env.GOOGLE_CLIENT_SECRET!,
-        refresh_token:
-          refreshToken,
-        grant_type:
-          "refresh_token",
+        client_id: process.env.GOOGLE_CLIENT_ID!,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET!,
+        refresh_token: refreshToken,
+        grant_type: "refresh_token",
       }),
     }
   );
 
-  const data =
-    await response.json();
+  const data = await response.json();
+
+  if (!response.ok) {
+    console.error(
+      "Google token refresh failed:",
+      data.error
+    );
+
+    throw new Error(
+      data.error_description ||
+        data.error ||
+        "Unable to refresh Google access token."
+    );
+  }
+
+  if (!data.access_token) {
+    throw new Error(
+      "Google did not return an access token."
+    );
+  }
 
   return data;
 }
