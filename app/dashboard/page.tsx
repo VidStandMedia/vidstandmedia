@@ -1,7 +1,9 @@
 
-import Link from "next/link";
-
-import { getCampaign } from "@/app/actions/campaign";
+import DashboardAnalyticsChart from "./DashboardAnalyticsChart";
+import {
+  getCampaign,
+  getChannelAnalytics,
+} from "@/app/actions/campaign";
 
 function formatCustomerId(value: string) {
   const digits = value.replace(/\D/g, "");
@@ -86,6 +88,12 @@ function Detail({
 
 export default async function DashboardPage() {
   const campaign = await getCampaign();
+  const analytics = await getChannelAnalytics();
+
+  const latestAnalytics =
+    analytics.length > 0
+      ? analytics[analytics.length - 1]
+      : null;
 
   const hasChannel = Boolean(campaign.channel.id);
   const hasVideo = Boolean(campaign.video.id);
@@ -124,7 +132,6 @@ export default async function DashboardPage() {
         {/* Client Portal Header */}
 
         <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm sm:p-12">
-
           <h2 className="text-3xl font-extrabold text-black sm:text-4xl">
             Client Portal
           </h2>
@@ -138,13 +145,11 @@ export default async function DashboardPage() {
             can review your campaign information and
             monitor your campaign management progress.
           </p>
-
         </div>
 
         {/* Campaign Management Progress */}
 
         <section className="mt-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
-
           <h2 className="text-2xl font-bold text-black">
             Campaign Management Progress
           </h2>
@@ -159,7 +164,6 @@ export default async function DashboardPage() {
             {/* Step 1 */}
 
             <div className="flex items-start gap-4">
-
               <div
                 className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${
                   setupComplete
@@ -187,13 +191,11 @@ export default async function DashboardPage() {
                   </StatusBadge>
                 </div>
               </div>
-
             </div>
 
             {/* Step 2 */}
 
             <div className="flex items-start gap-4">
-
               <div
                 className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${
                   managerAccessAccepted
@@ -223,18 +225,18 @@ export default async function DashboardPage() {
                     </StatusBadge>
                   ) : (
                     <StatusBadge color="yellow">
-                      Invitation Not Yet Sent
+                      {campaign.googleAds.managerInvitationSent
+                        ? "Invitation Sent"
+                        : "Invitation Not Yet Sent"}
                     </StatusBadge>
                   )}
                 </div>
               </div>
-
             </div>
 
             {/* Step 3 */}
 
             <div className="flex items-start gap-4">
-
               <div
                 className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${
                   campaignReady
@@ -264,17 +266,14 @@ export default async function DashboardPage() {
                   </StatusBadge>
                 </div>
               </div>
-
             </div>
 
           </div>
-
         </section>
 
         {/* YouTube Channel */}
 
         <div className="mt-8">
-
           <DashboardCard
             title="YouTube Channel"
             icon={
@@ -289,7 +288,6 @@ export default async function DashboardPage() {
               </svg>
             }
           >
-
             <Detail
               label="Channel Name"
               value={
@@ -319,15 +317,12 @@ export default async function DashboardPage() {
             {/* Selected Video */}
 
             <div className="mt-8 border-t border-gray-200 pt-6">
-
               <h3 className="text-lg font-bold text-black">
                 Selected Video
               </h3>
 
               {hasVideo ? (
-
                 <div className="mt-4 flex flex-col gap-4 sm:flex-row">
-
                   {campaign.video.thumbnail && (
                     <a
                       href={videoUrl}
@@ -344,7 +339,6 @@ export default async function DashboardPage() {
                   )}
 
                   <div className="flex flex-col justify-center">
-
                     <h4 className="font-bold leading-6 text-black">
                       {campaign.video.title || "Selected YouTube video"}
                     </h4>
@@ -361,29 +355,94 @@ export default async function DashboardPage() {
                     >
                       Watch Selected Video →
                     </a>
-
                   </div>
-
                 </div>
-
               ) : (
-
                 <p className="mt-3 text-sm text-gray-600">
                   No YouTube video has been selected.
                 </p>
-
               )}
-
             </div>
-
           </DashboardCard>
+        </div>
 
+        {/* YouTube Performance */}
+
+        <div className="mt-8">
+          <DashboardCard
+            title="YouTube Performance"
+            icon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="23"
+                height="23"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M3 3v18h18" />
+                <path d="m19 9-5 5-4-4-5 5" />
+              </svg>
+            }
+          >
+            {latestAnalytics ? (
+              <>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                  <div className="rounded-xl bg-gray-50 p-5">
+                    <p className="text-sm text-gray-500">
+                      Total Views
+                    </p>
+                    <p className="mt-2 text-2xl font-bold text-gray-900">
+                      {latestAnalytics.views.toLocaleString()}
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl bg-gray-50 p-5">
+                    <p className="text-sm text-gray-500">
+                      Subscribers
+                    </p>
+                    <p className="mt-2 text-2xl font-bold text-gray-900">
+                      {latestAnalytics.subscribers.toLocaleString()}
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl bg-gray-50 p-5">
+                    <p className="text-sm text-gray-500">
+                      Videos
+                    </p>
+                    <p className="mt-2 text-2xl font-bold text-gray-900">
+                      {latestAnalytics.videoCount.toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-8">
+                  <h3 className="mb-4 text-lg font-bold text-black">
+                    Total Views History
+                  </h3>
+
+                  <DashboardAnalyticsChart data={analytics} />
+                </div>
+
+                <p className="mt-4 text-xs text-gray-500">
+                  Latest snapshot: {latestAnalytics.date}
+                </p>
+              </>
+            ) : (
+              <p className="text-sm leading-6 text-gray-600">
+                Your YouTube performance data will appear here
+                after your first daily snapshot is collected.
+              </p>
+            )}
+          </DashboardCard>
         </div>
 
         {/* Campaign Overview */}
 
         <div className="mt-8">
-
           <DashboardCard
             title="Campaign Overview"
             icon={
@@ -404,7 +463,6 @@ export default async function DashboardPage() {
               </svg>
             }
           >
-
             <Detail
               label="Promotion Goal"
               value={campaign.goal}
@@ -424,15 +482,12 @@ export default async function DashboardPage() {
               label="Target Language"
               value={campaign.audience.language}
             />
-
           </DashboardCard>
-
         </div>
 
         {/* Google Ads Account */}
 
         <div className="mt-8">
-
           <DashboardCard
             title="Google Ads Account"
             icon={
@@ -453,7 +508,6 @@ export default async function DashboardPage() {
               </svg>
             }
           >
-
             <Detail
               label="Google Ads Customer ID"
               value={formatCustomerId(
@@ -462,15 +516,14 @@ export default async function DashboardPage() {
             />
 
             <div className="border-b border-gray-100 py-3">
-
               <span className="text-sm text-gray-500">
                 Manager Invitation
               </span>
 
               <div className="mt-2">
-                {managerAccessAccepted ? (
+                {campaign.googleAds.managerInvitationSent ? (
                   <StatusBadge color="green">
-                    Access Approved
+                    Invitation Sent
                   </StatusBadge>
                 ) : (
                   <StatusBadge color="yellow">
@@ -478,11 +531,9 @@ export default async function DashboardPage() {
                   </StatusBadge>
                 )}
               </div>
-
             </div>
 
             <div className="py-3">
-
               <span className="text-sm text-gray-500">
                 Manager Access
               </span>
@@ -498,7 +549,6 @@ export default async function DashboardPage() {
                   </StatusBadge>
                 )}
               </div>
-
             </div>
 
             {!managerAccessAccepted && (
@@ -509,15 +559,12 @@ export default async function DashboardPage() {
                 instructions to approve access.
               </p>
             )}
-
           </DashboardCard>
-
         </div>
 
         {/* Management Subscription */}
 
         <div className="mt-8">
-
           <DashboardCard
             title="Management Subscription"
             icon={
@@ -537,7 +584,6 @@ export default async function DashboardPage() {
               </svg>
             }
           >
-
             <Detail
               label="Service"
               value="Campaign Management"
@@ -549,7 +595,6 @@ export default async function DashboardPage() {
             />
 
             <div className="border-b border-gray-100 py-3">
-
               <span className="text-sm text-gray-500">
                 Payment Status
               </span>
@@ -565,7 +610,6 @@ export default async function DashboardPage() {
                   </StatusBadge>
                 )}
               </div>
-
             </div>
 
             <p className="mt-4 text-sm leading-6 text-gray-600">
@@ -574,15 +618,12 @@ export default async function DashboardPage() {
               Google bills your advertising account
               directly for advertising charges.
             </p>
-
           </DashboardCard>
-
         </div>
 
         {/* Support */}
 
         <section className="mt-8 rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm sm:p-8">
-
           <h2 className="text-xl font-bold text-black">
             Need Help?
           </h2>
@@ -598,7 +639,6 @@ export default async function DashboardPage() {
           >
             Contact Support
           </a>
-
         </section>
 
         {/* Footer */}

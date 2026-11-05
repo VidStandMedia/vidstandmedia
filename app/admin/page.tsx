@@ -2,25 +2,48 @@
 
 import { useEffect, useState } from "react";
 
+type Creator = {
+  id: string;
+  email: string;
+  name: string | null;
+  image: string | null;
+  youtube_channel_name: string;
+  youtube_channel_id: string | null;
+  youtube_profile_image: string | null;
+};
+
 export default function AdminPage() {
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<Creator[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("/api/users")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("USERS:", data);
+    async function loadUsers() {
+      try {
+        const response = await fetch("/api/users");
+        const data = await response.json();
 
-        if (data.success) {
-          setUsers(data.data);
+        if (!response.ok || !data.success) {
+          throw new Error(
+            data.error || "Unable to load creators."
+          );
         }
-      })
-      .catch((error) => {
-        console.error(
-          "USERS ERROR:",
-          error
+
+        setUsers(data.data);
+      } catch (error) {
+        console.error("USERS ERROR:", error);
+
+        setError(
+          error instanceof Error
+            ? error.message
+            : "Unable to load creators."
         );
-      });
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadUsers();
   }, []);
 
   return (
@@ -33,67 +56,84 @@ export default function AdminPage() {
         Total Creators: {users.length}
       </p>
 
-      <div className="overflow-x-auto">
-        <table className="w-full border">
-          <thead>
-            <tr className="border-b">
-              <th className="text-left p-3">
-                Profile
-              </th>
+      {loading && (
+        <p>Loading creators...</p>
+      )}
 
-              <th className="text-left p-3">
-                Channel Name
-              </th>
+      {error && (
+        <p className="text-red-600">
+          {error}
+        </p>
+      )}
 
-              <th className="text-left p-3">
-                Email
-              </th>
+      {!loading && !error && users.length === 0 && (
+        <p>No creators found.</p>
+      )}
 
-              <th className="text-left p-3">
-                Channel ID
-              </th>
-            </tr>
-          </thead>
+      {!loading && users.length > 0 && (
+        <div className="overflow-x-auto">
+          <table className="w-full border">
+            <thead>
+              <tr className="border-b">
+                <th className="text-left p-3">
+                  Profile
+                </th>
 
-          <tbody>
-            {users.map((user, index) => (
-              <tr
-                key={index}
-                className="border-b"
-              >
-                <td className="p-3">
-                  <img
-                    src={
-                      user.youtube_profile_image
-                    }
-                    alt="Profile"
-                    className="w-12 h-12 rounded-full"
-                  />
-                </td>
+                <th className="text-left p-3">
+                  Channel Name
+                </th>
 
-                <td className="p-3">
-  <a
-    href={`/admin/${user.youtube_channel_id}`}
-    className="text-blue-600 underline"
-  >
-    {user.youtube_channel_name}
-  </a>
-</td>
+                <th className="text-left p-3">
+                  Email
+                </th>
 
-                <td className="p-3">
-                  {user.email}
-                </td>
-
-                <td className="p-3">
-                  {
-                    user.youtube_channel_id
-                  }
-                </td>
+                <th className="text-left p-3">
+                  Channel ID
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+
+            <tbody>
+              {users.map((user) => (
+                <tr
+                  key={user.id}
+                  className="border-b"
+                >
+                  <td className="p-3">
+                    {user.youtube_profile_image ? (
+                      <img
+                        src={user.youtube_profile_image}
+                        alt="Creator profile"
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
+                        <span className="text-gray-600">
+                          {user.email
+                            .charAt(0)
+                            .toUpperCase()}
+                        </span>
+                      </div>
+                    )}
+                  </td>
+
+                  <td className="p-3">
+                    {user.youtube_channel_name}
+                  </td>
+
+                  <td className="p-3">
+                    {user.email}
+                  </td>
+
+                  <td className="p-3">
+                    {user.youtube_channel_id ?? "Not connected"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </main>
   );
 }

@@ -449,3 +449,35 @@ export async function saveCampaignPayment(
     },
   });
 }
+
+
+export async function getChannelAnalytics() {
+  const campaign = await getCampaignWithRelations();
+
+  if (!campaign?.channel?.youtubeChannelId) {
+    return [];
+  }
+
+  const user = await getCurrentUser();
+  const channelId = campaign.channel.youtubeChannelId;
+
+  const records = await prisma.channelAnalytics.findMany({
+    where: {
+      userId: user.id,
+      channelId,
+    },
+    orderBy: {
+      snapshotDate: "asc",
+    },
+  });
+
+  return records.map((record) => ({
+    date: record.snapshotDate.toISOString().slice(0, 10),
+    views: Number(record.viewCount),
+    subscribers: Number(record.subscriberCount),
+    videoCount: record.videoCount,
+    watchTimeMinutes: record.watchTimeMinutes,
+    averageViewDurationSeconds:
+      record.averageViewDurationSeconds,
+  }));
+}

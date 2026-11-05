@@ -1,46 +1,98 @@
-import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-export async function GET() {
+import { prisma } from "@/lib/prisma";
+import { ADMIN_EMAIL } from "@/lib/admin";
+
+export async function GET(request: NextRequest) {
   try {
-    const { data, error } = await supabase
-      .from("users")
-      .select("*")
-      .order("created_at", {
-        ascending: false,
-      });
+    // Verify that the requester is the administrator.
+    const token = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
 
-    if (error) {
-      console.error(
-        "SUPABASE ERROR:",
-        error
-      );
-
+    if (
+      token?.email?.toLowerCase() !==
+      ADMIN_EMAIL.toLowerCase()
+    ) {
       return NextResponse.json(
         {
           success: false,
-          error,
+          error: "Unauthorized",
         },
         {
-          status: 500,
+          status: 401,
         }
       );
     }
+
+    // Retrieve users and their latest campaign channel.
+    const users = await prisma.user.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        image: true,
+        createdAt: true,
+
+        campaigns: {
+          orderBy: {
+            updatedAt: "desc",
+          },
+
+          take: 1,
+
+          select: {
+            channel: {
+              select: {
+                youtubeChannelId: true,
+                title: true,
+                thumbnail: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    // Format the response for the Agency Dashboard.
+    const data = users.map((user) => {
+      const channel = user.campaigns[0]?.channel;
+
+      return {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        image: user.image,
+        created_at: user.createdAt,
+
+        youtube_channel_id:
+          channel?.youtubeChannelId ?? null,
+
+        youtube_channel_name:
+          channel?.title ?? "Not connected",
+
+        youtube_profile_image:
+          channel?.thumbnail ?? user.image ?? null,
+      };
+    });
 
     return NextResponse.json({
       success: true,
       data,
     });
   } catch (error) {
-    console.error(
-      "GET USERS ERROR:",
-      error
-    );
+    console.error("GET USERS ERROR:", error);
 
     return NextResponse.json(
       {
         success: false,
-        error: String(error),
+        error: "Unable to retrieve users",
       },
       {
         status: 500,

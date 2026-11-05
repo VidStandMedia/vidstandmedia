@@ -430,7 +430,7 @@ export default function PrivacyPage() {
             <p className="mt-4 leading-8 text-gray-700">
               VidStandMedia relies on third-party services to operate and
               provide portions of our website and services. These may include
-              Google, YouTube, Google Ads, Stripe, Supabase, Vercel, and other
+              Google, YouTube, Google Ads, Stripe, Vercel, and other
               service providers.
             </p>
 
