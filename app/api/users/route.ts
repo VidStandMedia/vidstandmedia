@@ -1,3 +1,4 @@
+
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
@@ -6,33 +7,25 @@ import { ADMIN_EMAIL } from "@/lib/admin";
 
 export async function GET(request: NextRequest) {
   try {
-    // Verify that the requester is the administrator.
     const token = await getToken({
       req: request,
       secret: process.env.NEXTAUTH_SECRET,
     });
 
     if (
-      token?.email?.toLowerCase() !==
-      ADMIN_EMAIL.toLowerCase()
+      !token?.email ||
+      token.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()
     ) {
       return NextResponse.json(
-        {
-          success: false,
-          error: "Unauthorized",
-        },
-        {
-          status: 401,
-        }
+        { success: false, error: "Unauthorized" },
+        { status: 401, headers: { "Cache-Control": "no-store" } }
       );
     }
 
-    // Retrieve users and their latest campaign channel.
     const users = await prisma.user.findMany({
       orderBy: {
         createdAt: "desc",
       },
-
       select: {
         id: true,
         email: true,
@@ -44,59 +37,70 @@ export async function GET(request: NextRequest) {
           orderBy: {
             updatedAt: "desc",
           },
-
           take: 1,
-
           select: {
-            channel: {
-              select: {
-                youtubeChannelId: true,
-                title: true,
-                thumbnail: true,
-              },
-            },
+            id: true,
+            goal: true,
+            budget: true,
+            createdAt: true,
+            updatedAt: true,
+
+            channel: true,
+            googleAds: true,
+            business: true,
+            video: true,
+            audience: true,
+            agreement: true,
+            payment: true,
           },
         },
       },
     });
 
-    // Format the response for the Agency Dashboard.
     const data = users.map((user) => {
-      const channel = user.campaigns[0]?.channel;
+      const campaign = user.campaigns[0] ?? null;
+      const channel = campaign?.channel;
 
       return {
         id: user.id,
         email: user.email,
         name: user.name,
         image: user.image,
-        created_at: user.createdAt,
-
-        youtube_channel_id:
-          channel?.youtubeChannelId ?? null,
+        createdAt: user.createdAt,
 
         youtube_channel_name:
           channel?.title ?? "Not connected",
 
+        youtube_channel_id:
+          channel?.youtubeChannelId ?? null,
+
         youtube_profile_image:
           channel?.thumbnail ?? user.image ?? null,
+
+        campaign,
       };
     });
 
-    return NextResponse.json({
-      success: true,
-      data,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        data,
+      },
+      {
+        headers: {
+          "Cache-Control": "no-store",
+        },
+      }
+    );
   } catch (error) {
     console.error("GET USERS ERROR:", error);
 
     return NextResponse.json(
       {
         success: false,
-        error: "Unable to retrieve users",
+        error: "Unable to retrieve creators and campaign information.",
       },
-      {
-        status: 500,
-      }
+      { status: 500, headers: { "Cache-Control": "no-store" } }
     );
   }
 }
